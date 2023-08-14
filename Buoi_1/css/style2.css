@@ -1,0 +1,29 @@
+.container{
+    width: 40%;
+    margin: 30px auto;
+}
+.div1{
+    width: 100%;
+}
+.div1:first-child{
+    display: grid;
+    grid-template-columns: 49% 49%;
+    justify-content: space-around;
+}
+.div1:first-child>.col:first-child{
+    width: 100%;   
+}
+.div1:first-child>.col:first-child>input{
+    height: 37px;
+    width: 100%;
+}
+.div1:first-child>.col:last-child>button{
+    width: 50%;
+    margin-left: 10px;
+    height: 45px;
+    border-radius: 7px;
+    background-color: aquamarine;
+    border:none;
+    cursor: pointer;
+
+}
