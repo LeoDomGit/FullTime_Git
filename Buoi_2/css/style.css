@@ -63,7 +63,7 @@
     }
     .col{
         width:100%;
-        background-color: green;
+        /* background-color: green; */
         color:white;
         margin-top: 20px;
     }
@@ -96,6 +96,25 @@
     }
     .button2{
         background-color: rgb(43, 169, 238);
+    }
+    .container>.row:nth-child(2){
+        margin-top: 30%;
+    }
+    .container>.row:nth-child(2){
+        display: grid;
+        line-height: 46px;
+        grid-template-columns: 20% 20% 20% 20% 20%;
+    }
+    .container>.row:last-child{
+        display: grid;
+        grid-template-columns: 20% 20% 20% 20% 20%;
+    }
+    .rowcart{
+        display: grid;
+        grid-template-columns: 20% 20% 20% 20% 20%;
+        text-align: center;
+        background-color: black;
+        line-height: 30px;
     }
 }
 .mb-2{

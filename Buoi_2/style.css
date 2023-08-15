@@ -139,7 +139,7 @@ ul{
     height: 242px !important;
     width: auto;
     margin: 0px auto;
-    margin-left: 15%;
+    margin-left: 8%;
 }
 .productItem>.row:last-child>button{
     padding: 10px 30px;
@@ -189,9 +189,16 @@ ul{
     border-radius: 7px;
     height: 70%;
 }
+.cartRow{
+    position: absolute;
+    top: 30%;
+}
 @media screen and (min-width:1200px) {
 .headerMobie{
     display: none;
+}
+.row:last-child{
+    margin-top: 30%;
 }
 }
 @media screen and (min-width:897px) and (max-width:1000px) {
@@ -222,7 +229,6 @@ ul{
 @media screen and (max-width:896px) {
     .headerDesktop{
         display: none;
-
     }
     .headerMobie{
         display: block;
@@ -236,11 +242,11 @@ ul{
     .headerMobie>.row>.col:first-child>img{
         width:100%;height: auto;
     }
-    .headerMobie>.row>.col:nth-child(2)>.row:first-child{
+    /* .headerMobie>.row>.col:nth-child(2)>.row:first-child{
         padding-top: 5%;
         display: grid;
         grid-template-columns: 80% 20% ;
-    }
+    } */
     .headerMobie>.submenu{
         width: 100% !important;
     }
