@@ -103,6 +103,8 @@
         <h3 class="text-center">IPhone</h3>
         <hr>
         <div class="row" id="resultProduct">
+
+            
         </div>
         <div class="row w-100 mt-3">
             <button style="margin: 10px auto;" class="btn btn-outline-success w-25" id="showmorebtn">Xem thêm</button>
@@ -129,6 +131,8 @@
     <script>
         $(document).ready(function () {
             login(); loadData();
+            logout();
+
         });
         const url = 'https://students.trungthanhweb.com/api/';
         // ===========Global Constant=============
@@ -143,6 +147,20 @@
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
+        function logout() {
+            $("#logoutbtn").click(function (e) {
+                e.preventDefault();
+                if (localStorage.getItem('token')) {
+                    localStorage.removeItem('token');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Bye bye !'
+                    }).then(()=>{
+                        window.location.reload();
+                    })
+                }
+            });
+        }
         //   ===============================
         function login() {
             $("#loginBtn").click(function (e) {
@@ -189,7 +207,10 @@
             });
         }
         function loadData() {
+            $("#logoutbtn").hide();
             if (localStorage.getItem('token') && localStorage.getItem('token') != null) {
+                $("#loginBtn").hide();
+                $("#logoutbtn").show();
                 $.ajax({
                     type: "GET",
                     url: url + "home",
@@ -200,6 +221,7 @@
                     success: function (res) {
                         const brands = res.brands;
                         const categrories = res.categrories;
+                        const products = res.products.data;
                         if (brands.length > 0) {
                             var str = ``;
                             brands.forEach(el => {
@@ -217,6 +239,32 @@
                                 `
                             });
                             $("#cateUl").html(str);
+                        }
+                        
+                        if(products.length>0){
+                            var str=``;
+                            products.forEach(el => {        
+                                str+=`
+                                <div class="col-md-3 mb-3">
+                                    <div class="card" style="width: 100%;">
+                                        <img class="productImage"  src="https://students.trungthanhweb.com/images/`+el['images']+`">
+                                        <div class="card-body">
+                                            <a href="#">
+                                            <h5 class="card-title">`+ el['name'] + `</h5></a>
+                                            <p class="card-text">
+                                                Giá : `+ Intl.NumberFormat('en-US').format(el['price']) + `    
+                                            </p>
+                                            <p>Loại sản phẩm : `+ el['catename'] + `</p>
+                                            <p>Thương hiệu : `+ el['brandname'] + `</p>
+                                            <a href="#" class="btn btn-primary chitietBtn"
+                                            data-id="`+ el['id'] + `">Chi tiết</a>
+                                            <button class="btn btn-success addToCartBtn" data-id="`+ el['id'] + `">Thêm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                `
+                            });
+                            $("#resultProduct").html(str);
                         }
 
                     }
