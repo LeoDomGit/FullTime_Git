@@ -195,10 +195,12 @@
                                     })
 
                                 } else {
+                                   if(res.msg.email){
                                     Toast.fire({
                                         icon: 'error',
-                                        title: 'Đăng nhập không thành công'
+                                        title: res.msg.email
                                     })
+                                   }
                                 }
                             }
                         });
