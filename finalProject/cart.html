@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
+"></script>
+    <link rel="stylesheet" href="css/style2.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="modal fade" id="LoginModal" tabindex="-1" aria-labelledby="LoginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="LoginModalLabel">Login Modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="email" placeholder="Email" class="form-control mb-2" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submitloginBtn">
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================== -->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Thương Hiệu
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="brandUl">
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Loại sản phẩm
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="cateUl">
+                        </ul>
+                    </li>
+                    <li class="nav-item" id="billLi">
+                        <a href="/bills.html" class="nav-link">Hóa đơn</a>
+                    </li>
+                    <li class="nav-item" id="logoutLI">
+                        <a href="#" class="nav-link" id="logoutbtn">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="loginBtn">Login</a>
+                    </li>
+                </ul>
+
+                <form class="d-flex">
+                    <a class="icon-cart" href="/cart.html"><i class='bx bxs-cart'></i></a>
+                    <input class="form-control me-2" type="search" id="searchProduct" placeholder="Search"
+                        aria-label="Search">
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Thành tiền</th>
+
+                    </tr>
+                </thead>
+                <tbody id="cartressult">
+                   
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    <script>
+        $(document).ready(function () {
+            login(); logout(); loadCart();
+        });
+        const url = 'https://students.trungthanhweb.com/api/';
+        // ===========Global Constant=============
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1700,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+        function logout() {
+            $("#logoutbtn").click(function (e) {
+                e.preventDefault();
+                if (localStorage.getItem('token')) {
+                    localStorage.removeItem('token');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Bye bye !'
+                    }).then(() => {
+                        window.location.reload();
+                    })
+                }
+            });
+        }
+        //   ===============================
+        function login() {
+            $("#loginBtn").click(function (e) {
+                e.preventDefault();
+                $("#LoginModal").modal('show');
+                $("#submitloginBtn").click(function (e) {
+                    e.preventDefault();
+                    var email = $("#email").val().trim();
+                    if (email == '') {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Thiếu  email'
+                        })
+                    } else {
+                        $.ajax({
+                            type: "post",
+                            url: "https://students.trungthanhweb.com/api/checkLoginhtml",
+                            data: {
+                                // Name : Giá trị 
+                                email: email
+                            },
+                            dataType: "JSON",
+                            success: function (res) {
+                                if (res.check == true) {
+                                    console.log(res.apitoken);
+                                    localStorage.setItem('token', res.apitoken);
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Đăng nhập thành công'
+                                    }).then(() => {
+                                        window.location.reload();
+                                    })
+
+                                } else {
+                                    if (res.msg.email) {
+                                        Toast.fire({
+                                            icon: 'error',
+                                            title: res.msg.email
+                                        })
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        var link = url + 'home'; //string 
+        // ================================
+        function loadCart() {
+            if (localStorage.getItem('cart') && localStorage.getItem('cart') != null) {
+                var cart = localStorage.getItem('cart');
+                var id = JSON.parse(cart);
+                $.ajax({
+                    type: "GET",
+                    url: url + "getCart",
+                    data: {
+                        apitoken: localStorage.getItem('token'),
+                        id: id
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        const brands = res.brands;
+                        const categrories = res.categrories;
+                        if (brands.length > 0) {
+                            var str = ``;
+                            brands.forEach(el => {
+                                str += `
+                                <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
+                                `
+                            });
+                            $("#brandUl").html(str);
+                        }
+                        if (categrories.length > 0) {
+                            var str = ``;
+                            categrories.forEach(el => {
+                                str += `
+                                <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
+                                `
+                            });
+                            $("#cateUl").html(str);
+                        }
+                        if(res.result.length>0){
+                            var str=``;
+                            var sum=0;
+                            res.result.forEach((el,index) => {
+                                str+=`
+                                <tr class="">
+                                    <td scope="row">`+(++index)+`</td>
+                                    <td ><img src="`+el[3]+`" style="width:150px;height: auto;" alt=""></td>
+                                    <td>`+el[1]+`</td>
+                                    <td >`+Intl.NumberFormat('en-US').format(el[2])+`</td>
+                                    <td>`+el[4]+`</td>
+                                    <td>`+Intl.NumberFormat('en-US').format(el[5])+`</td>
+                                </tr>
+                                `;
+                                sum+=el[5];
+                            });
+                            str+=`
+                            <tr class="">
+                                <td colspan='5' scope="row">Tổng tiền</td>
+                                <td scope="row">`+Intl.NumberFormat('en-US').format(sum)+`</td>
+
+                            </tr>
+                            `
+                            $("#cartressult").html(str);
+                        }
+                    }
+                });
+            }
+        }
+        
+    </script>
+
+</body>
+
+</html>
