@@ -282,8 +282,11 @@ td{
 @media screen and (max-width:900px){
 img{max-width: 100%;}
 }
-@media screen and(min-width:1200px) {
+@media screen and(min-width:900px) and (max-width:1190px) {
 img{
     max-width: 100%;
+}
+.card-content {
+    min-height: 125px;
 }
 }
