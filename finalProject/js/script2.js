@@ -3,7 +3,9 @@ $(document).ready(function () {
     logout();
     getData();
 });
+var w = window.innerWidth;
 const api = 'https://students.trungthanhweb.com/api/';
+const imageURL = 'https://students.trungthanhweb.com/images/'
 function getData(){
     $("#logoutbtn").hide();
     if (localStorage.getItem('token') && localStorage.getItem('token') != null) {
@@ -47,9 +49,73 @@ function getData(){
             var str=``;
             gallery.forEach(el => {
                 str=`
-                <div class="item"><img class="pointer" src="`+el+`" alt=""><div>
+                <div class="item"><img class="pointer sliderimage" src="`+el+`" alt=""><div>
                 `;
                 $("#carousel").append(str);
+            });
+            const products=res.products[0];
+            var image=imageURL+products.images;
+            $("#productImage").attr("src",image);
+            const name = products.name;
+            //Giá = Giá * (100-discount) %;
+            const price =  Intl.NumberFormat('en-US').format((products.price*(100-products.discount)/100));
+            const discount= products.discount +" %";
+            const brand = products.brandname;
+            const cate = products.catename;
+            $("#productname").html(name);
+            $("#discount").text(discount);
+            $("#price").text(price);
+            $("#catename").text(cate);
+            $("#brandname").text(brand);
+            sliderImageChange();
+            const content = products.content;
+            $("#content").html(content);
+            //Đi lấy sản phẩm cùng loại
+            const cateProducts = res.cateproducts;
+            const brandproducts = res.brandproducts;
+            var str=``;
+            cateProducts.forEach(el => {
+                str=`
+                <div class="item">
+                        <div class="card" style="width: 100%">
+                        <a href="detail.html?id=`+ el.id + `">    
+                            <img class="pt-2" style="height: auto;
+                            width: 100%;
+                            margin: 0px auto;" src="`+(imageURL+el.image)+`" alt="">
+                            </a>
+                            <div class="card-body">
+                            <div class="card-content">
+                            <h5 class="card-title">`+el.name+`</h5>
+                            <p class="card-text">`+ Intl.NumberFormat('en-US').format(el.price)+`</p>
+                            </div>
+                            <a href="detail.html?id=`+ el.id + `" class="btn btn-primary">Chi tiết</a>
+
+                            </div>
+                          </div>
+                </div>
+                `;
+                $("#sameCateProduct").append(str);
+            });
+            brandproducts.forEach(el => {
+                str=`
+                <div class="item">
+                        <div class="card" style="width: 100%;">
+                        <a href="detail.html?id=`+ el.id + `">    
+                        <img class="pt-2" style="height: auto;
+                        width: 100%;
+                        margin: 0px auto;" src="`+(imageURL+el.image)+`" alt="">
+                        </a>
+                            <div class="card-body">
+                              <div class="card-content">
+                              <h5 class="card-title">`+el.name+`</h5>
+                              <p class="card-text">`+ Intl.NumberFormat('en-US').format(el.price)+`</p>
+                              <a href="detail.html?id=`+ el.id + `" class="btn btn-primary">Chi tiết</a>
+                              </div>
+                            </div>
+                          </div>
+                </div>
+                `;
+                $("#sameBrandProduct").append(str);
             });
             Owl();
         }
@@ -58,11 +124,68 @@ function getData(){
 
     }
 }
+function sliderImageChange(){
+    $('.sliderimage').click(function (e) { 
+        e.preventDefault();
+        var src = $(this).attr('src');
+        $("#productImage").attr("src",src);
+    });
+}
 function Owl(){
     $('.owl-carousel').owlCarousel({
         loop:true,
         margin:10,
         responsiveClass:true,
+        items:1 ,
+        responsive:{
+            0:{
+                items:1
+            },
+            600:{
+                items:3
+            },
+            1000:{
+                items:5
+            }
+        }
+        
+    })
+
+
+    console.log(w);
+    $('#sameCateProduct').owlCarousel({
+        loop:true,
+        margin:10,
+        responsiveClass:true,
+        items:6,
+        responsive:{
+            0:{
+                items:1
+            },
+            600:{
+                items:3
+            },
+            1000:{
+                items:5
+            }
+        }
+        
+    })
+    $('#sameBrandProduct').owlCarousel({
+        loop:true,
+        margin:10,
+        responsiveClass:true,
+        items:6, responsive:{
+            0:{
+                items:1
+            },
+            600:{
+                items:3
+            },
+            1000:{
+                items:5
+            }
+        }
         
     })
 }

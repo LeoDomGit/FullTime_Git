@@ -207,9 +207,6 @@ ul {
     font-weight: bolder;
 }
 
-#productImage {
-    transition: ease-in-out 1s;
-}
 
 td {
     border: 1px solid none;
@@ -224,7 +221,69 @@ td {
 }
 td{
     vertical-align: middle;
+    border: 1px solid black;
 }
 .pointer{
     cursor: pointer;
+}
+.contentrow{
+    padding-left: 5% ;
+    border-right: 1px solid lightblue;
+}
+#content{
+    font-size: 18px !important;
+    text-align: left;
+}
+
+.contentrow>table{
+    border: 1px solid black;
+}
+.contentrow>p{
+    font-size: 16px;
+}
+#productImage {
+    transition: ease-in-out 1s;
+    height: 400px;
+    width: auto;
+    margin: 0px auto;
+}
+.brandrow{
+    width: 80%;
+    padding-left: 5%;
+}
+.brandrow>h5{
+    margin-top: 5%;
+    font-size: 18px;
+    font-weight: bold;
+
+}
+.caterow{
+    width: 80%;
+    padding-left:5%;
+}
+.caterow>h5{
+    margin-top: 5%;
+    font-size: 18px;
+    font-weight: bold;
+
+}
+.card{
+    box-sizing: border-box;
+    box-shadow: 2px 2px 2px 2px rgb(216, 216, 216);
+    border-radius: 7px;
+    min-height: 310px;
+}
+.card-content{
+    min-height: 81px;
+}
+.card-content>.card-title{
+    font-size: 17px !important;
+}
+@media screen and (max-width:900px){
+img{max-width: 100%;}
+}
+@media screen and(min-width:1200px) {
+img{
+    max-width: 100%;
+}
 }
