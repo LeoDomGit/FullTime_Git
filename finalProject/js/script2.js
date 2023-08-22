@@ -134,7 +134,7 @@ function sliderImageChange(){
 function Owl(){
     $('.owl-carousel').owlCarousel({
         loop:true,
-        margin:10,
+        margin:20,
         responsiveClass:true,
         items:1 ,
         responsive:{
@@ -155,7 +155,8 @@ function Owl(){
     console.log(w);
     $('#sameCateProduct').owlCarousel({
         loop:true,
-        margin:10,
+        margin:20,
+
         responsiveClass:true,
         items:6,
         responsive:{
@@ -173,7 +174,8 @@ function Owl(){
     })
     $('#sameBrandProduct').owlCarousel({
         loop:true,
-        margin:10,
+        margin:20,
+
         responsiveClass:true,
         items:6, responsive:{
             0:{
