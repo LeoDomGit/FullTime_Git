@@ -5,13 +5,26 @@ $(document).ready(function () {
 });
 var w = window.innerWidth;
 const api = 'https://students.trungthanhweb.com/api/';
-const imageURL = 'https://students.trungthanhweb.com/images/'
+const imageURL = 'https://students.trungthanhweb.com/images/';
+const params = new URLSearchParams(window.location.search);
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 1700,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+//   ================================
 function getData(){
     $("#logoutbtn").hide();
     if (localStorage.getItem('token') && localStorage.getItem('token') != null) {
         $("#loginBtn").hide();
         $("#logoutbtn").show();
-        const params = new URLSearchParams(window.location.search);
+        
         if(!params.has('id')){
             window.location.replace('index.html');
         }
@@ -40,7 +53,7 @@ function getData(){
                 var str = ``;
                 categrories.forEach(el => {
                     str += `
-                        <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
+                        <li><a class="dropdown-item" href="categrories.html?id=`+el.id+`">`+ el.name + `</a></li>
                         `
                 });
                 $("#cateUl").html(str);
@@ -117,13 +130,31 @@ function getData(){
                 `;
                 $("#sameBrandProduct").append(str);
             });
+            const contentHeight=$(".contentrow")[0].offsetHeight;
+            var height=300;
+            $("#content").css("height",height+'px');
+            $("#content").css('overflow','hidden');
+            $("#xemThem").click(function (e) { 
+                e.preventDefault();
+                $("#content").css("height",contentHeight+'px');
+                $("#xemThem").hide();
+                // var height =$(".contentrow")[0].offsetHeight;
+                // console.log(height);
+                // var newHeight = 8500;     
+                // console.log(newHeight);
+                // // height:8500px
+                // $("#content").css("height",newHeight+"px");
+            });
             Owl();
+            addToCart();
         }
        });
 
 
     }
 }
+//   ================================
+
 function sliderImageChange(){
     $('.sliderimage').click(function (e) { 
         e.preventDefault();
@@ -131,28 +162,26 @@ function sliderImageChange(){
         $("#productImage").attr("src",src);
     });
 }
+//   ================================
+
 function Owl(){
-    $('.owl-carousel').owlCarousel({
+    $('#carousel').owlCarousel({
         loop:true,
         margin:20,
         responsiveClass:true,
         items:1 ,
         responsive:{
             0:{
-                items:1
-            },
-            600:{
                 items:3
             },
-            1000:{
-                items:5
-            }
+            1200:{
+                items:4
+            },
+
+
         }
         
     })
-
-
-    console.log(w);
     $('#sameCateProduct').owlCarousel({
         loop:true,
         margin:20,
@@ -175,9 +204,9 @@ function Owl(){
     $('#sameBrandProduct').owlCarousel({
         loop:true,
         margin:20,
-
         responsiveClass:true,
-        items:6, responsive:{
+        items:6, 
+        responsive:{
             0:{
                 items:1
             },
@@ -251,5 +280,33 @@ function login() {
                 });
             }
         });
+    });
+}
+function addToCart(){
+    $("#addTocartBtn").click(function (e) { 
+        e.preventDefault();
+        var id=params.get('id');
+        if(localStorage.getItem('cart')&&localStorage.getItem('cart')!=null){
+            var cart =localStorage.getItem('cart');
+            var arr = JSON.parse(cart);
+        }else{
+            var arr=[];
+        }
+        var check=false;
+        arr.forEach(el => {
+            if(el[0]==id){
+                el[1]++;
+                check=true;
+            }
+        });
+        if(check==false){
+            var item=[id,1];
+            arr.push(item);
+        }
+        localStorage.setItem('cart',JSON.stringify(arr));
+        Toast.fire({
+            icon: 'success',
+            title: 'Đã thêm thành công'
+        })
     });
 }

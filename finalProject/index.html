@@ -67,7 +67,7 @@
                         </ul>
                     </li>
                     <li class="nav-item" id="billLi">
-                        <a href="/bills.html" class="nav-link">Hóa đơn</a>
+                        <a href="bills.html" class="nav-link">Hóa đơn</a>
                     </li>
                     <li class="nav-item" id="logoutLI">
                         <a href="#" class="nav-link" id="logoutbtn">Logout</a>
@@ -78,7 +78,7 @@
                 </ul>
 
                 <form class="d-flex">
-                    <a class="icon-cart" href="/cart.html"><i class='bx bxs-cart'></i></a>
+                    <a class="icon-cart" href="cart.html"><i class='bx bxs-cart'></i></a>
                     <input class="form-control me-2" type="search" id="searchProduct" placeholder="Search"
                         aria-label="Search">
                 </form>
@@ -131,9 +131,10 @@
     <script>
         $(document).ready(function () {
             login(); loadData(); showMore();
-            logout();
+            logout();getError();
 
         });
+
         const url = 'https://students.trungthanhweb.com/api/';
         // ===========Global Constant=============
         const Toast = Swal.mixin({
@@ -147,6 +148,24 @@
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
+        function getError(){
+            const params = new URLSearchParams(window.location.search);
+            if(params.has("err")){
+                switch (params.get("err")) {
+                    case 'emtycart':
+                            Toast.fire({
+                            icon: 'warning',
+                            title: 'Giỏ hàng rỗng'
+                        }).then(()=>{
+                            window.location.replace('index.html')
+                        })
+                        break;
+                
+                    default:
+                        break;
+                }
+            }
+        }
         function logout() {
             $("#logoutbtn").click(function (e) {
                 e.preventDefault();
@@ -241,7 +260,7 @@
                         var str = ``;
                         brands.forEach(el => {
                             str += `
-                                <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
+                                <li><a class="dropdown-item" href="">`+ el.name + `</a></li>
                                 `
                         });
                         $("#brandUl").html(str);
@@ -250,7 +269,7 @@
                         var str = ``;
                         categrories.forEach(el => {
                             str += `
-                                <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
+                                <li><a class="dropdown-item" href="categrories.html?id=`+el.id+`">`+ el.name + `</a></li>
                                 `
                         });
                         $("#cateUl").html(str);

@@ -86,24 +86,24 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
     </nav>
     <div class="container mt-4">
         <div class="table-responsive">
-            <table class="table table-primary">
-                <thead>
+            <table class="table ">
+                <thead class="table-dark">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Hình ảnh</th>
                         <th scope="col">Tên</th>
                         <th scope="col">Giá</th>
-                        <th scope="col">Số lượng</th>
+                        <th scope="col" style="width:10%">Số lượng</th>
                         <th scope="col">Thành tiền</th>
 
                     </tr>
                 </thead>
                 <tbody id="cartressult">
-                   
+
                 </tbody>
             </table>
         </div>
-        
+
     </div>
     <script>
         $(document).ready(function () {
@@ -198,6 +198,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                     },
                     dataType: "JSON",
                     success: function (res) {
+                        if(res.check==true){
+
+
                         const brands = res.brands;
                         const categrories = res.categrories;
                         if (brands.length > 0) {
@@ -213,41 +216,118 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                             var str = ``;
                             categrories.forEach(el => {
                                 str += `
-                                <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
+                                <li><a class="dropdown-item" href="categrories.html?id=`+el.id+`">`+ el.name + `</a></li>
                                 `
                             });
                             $("#cateUl").html(str);
                         }
-                        if(res.result.length>0){
-                            var str=``;
-                            var sum=0;
-                            res.result.forEach((el,index) => {
-                                str+=`
-                                <tr class="">
-                                    <td scope="row">`+(++index)+`</td>
-                                    <td ><img src="`+el[3]+`" style="width:150px;height: auto;" alt=""></td>
-                                    <td>`+el[1]+`</td>
-                                    <td >`+Intl.NumberFormat('en-US').format(el[2])+`</td>
-                                    <td>`+el[4]+`</td>
-                                    <td>`+Intl.NumberFormat('en-US').format(el[5])+`</td>
+                        if (res.result.length > 0) {
+                            var str = ``;
+                            var sum = 0;
+                            res.result.forEach((el, index) => {
+                                if (index % 2 == 0) {
+                                    str += `
+                                <tr class="table-primary">
+                                    <td class="table-borderless" scope="row">`+ (++index) + `</td>
+                                    <td class="table-borderless"><img src="`+ el[3] + `" style="width:150px;height: auto;" alt=""></td>
+                                    <td class="table-borderless">`+ el[1] + `</td>
+                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[2]) + `</td>
+                                    <td  class="table-borderless"> <input type="number" class="form-control qtyinput" value="`+ el[4] + `" data-id="` + el[0] + `" ></td>
+
+                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[5]) + `</td>
                                 </tr>
                                 `;
-                                sum+=el[5];
+                                } else {
+                                    str += `
+                                <tr class="table-secondary">
+                                    <td class="table-borderless" scope="row">`+ (++index) + `</td>
+                                    <td class="table-borderless"><img src="`+ el[3] + `" style="width:150px;height: auto;" alt=""></td>
+                                    <td class="table-borderless">`+ el[1] + `</td>
+                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[2]) + `</td>
+                                    <td  class="table-borderless"> <input type="number" class="form-control qtyinput" value="`+ el[4] + `" data-id="` + el[0] + `" ></td>
+                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[5]) + `</td>
+                                </tr>
+                                `;
+                                }
+
+                                sum += el[5];
                             });
-                            str+=`
-                            <tr class="">
-                                <td colspan='5' scope="row">Tổng tiền</td>
-                                <td scope="row">`+Intl.NumberFormat('en-US').format(sum)+`</td>
+                            str += `
+                            <tr class="table-dark">
+                                <td colspan='5' class="table-borderless" scope="row">Tổng tiền</td>
+                                <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(sum) + `</td>
 
                             </tr>
                             `
                             $("#cartressult").html(str);
                         }
+                        editQuantity();
+                    }else{
+                        str=`
+                        <tr class="table-dark">
+                            <td colspan='6' class="table-borderless" scope="row">Chưa có sản phẩm</td>
+                        </tr>
+                        `;
+                        $("#cartressult").html(str);
+                    }
                     }
                 });
+            }else{
+                window.location.replace('index.html?err=emtycart');
             }
         }
-        
+        function editQuantity() {
+            $(".qtyinput").change(function (e) {
+                e.preventDefault();
+                var id = $(this).attr('data-id');
+                var qty = $(this).val();
+                var cart = JSON.parse(localStorage.getItem('cart'));
+                if (qty == 0) {
+                    Swal.fire({
+                        icon:'warning',
+                        text: 'Xóa khỏi giỏ hàng?',
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: 'Đúng',
+                        denyButtonText: `Không`,
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            var arr = [];
+                            cart.forEach(el => {
+                                if(el[0]!=id){
+                                    arr.push(el);
+                                }
+                            });
+                            if(arr.length==0){
+                                localStorage.removeItem('cart');
+                            }else{
+                                localStorage.setItem('cart', JSON.stringify(arr));
+                            }
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Đã xóa !'
+                            }).then(()=>{
+                                loadCart()
+                            })
+
+
+                        } else if (result.isDenied) {
+                            loadCart();
+                        }
+                    })
+                }else{
+                    cart.forEach(el => {
+                        if (el[0] == id) {
+                            el[1] = qty;
+                        }
+                    });
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                }
+                loadCart();
+            });
+        }
     </script>
 
 </body>

@@ -9,7 +9,11 @@
     width: 100%;
 }
 .container1{
-    width: 98%;
+    width: 97%;
+    margin: 10px auto;
+}
+.container2{
+    width: 88%;
     margin: 10px auto;
 }
 .header {
@@ -229,12 +233,16 @@ td{
 .contentrow{
     padding-left: 5% ;
     border-right: 1px solid lightblue;
+    transition: ease-in-out 1s; 
 }
 #content{
     font-size: 18px !important;
     text-align: left;
 }
-
+#xemThem{
+    width: 20%;
+    margin: 0px auto;
+}
 .contentrow>table{
     border: 1px solid black;
 }
@@ -243,8 +251,8 @@ td{
 }
 #productImage {
     transition: ease-in-out 1s;
-    height: 400px;
-    width: auto;
+    height: auto;
+    width: 100%;
     margin: 0px auto;
 }
 .brandrow{
@@ -279,6 +287,7 @@ td{
 .card-content>.card-title{
     font-size: 17px !important;
 }
+
 @media screen and (max-width:900px){
 img{max-width: 100%;}
 }
@@ -289,4 +298,7 @@ img{
 .card-content {
     min-height: 125px;
 }
+}
+table tr td{
+    border: none;
 }
