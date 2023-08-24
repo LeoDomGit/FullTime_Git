@@ -38,6 +38,27 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
             </div>
         </div>
     </div>
+    <!-- ======================================= -->
+    <div class="modal fade" id="ThanhToanModal" tabindex="-1" aria-labelledby="ThanhToanModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ThanhToanModalLabel">Thanh toán </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control w-100 mb-2" id="tenKH" placeholder="Tên khách hàng ">
+                    <input type="text" class="form-control w-100 mb-2" id="phone" placeholder="Số điện thoại ">
+                    <input type="text" class="form-control w-100 mb-2" id="address" placeholder="Địa chỉ ">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitCheckOut">Thanh Toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- ============================== -->
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
@@ -103,11 +124,17 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                 </tbody>
             </table>
         </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" id="checkoutBtn">Thanh toán</button>
+            </div>
+        </div>
 
     </div>
     <script>
         $(document).ready(function () {
             login(); logout(); loadCart();
+            CheckOut();
         });
         const url = 'https://students.trungthanhweb.com/api/';
         // ===========Global Constant=============
@@ -122,6 +149,41 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
+        function CheckOut() {
+            $("#checkoutBtn").click(function (e) {
+                e.preventDefault();
+                $("#ThanhToanModal").modal('show');
+                const format = /(0[3|5|7|8|9])+([0-9]{8})\b/g
+                $("#submitCheckOut").click(function (e) {
+                    e.preventDefault();
+                    var tenKH = $("#tenKH").val().trim();
+                    var phone = $("#phone").val().trim();
+                    var address = $("#address").val().trim();
+                    if (tenKH == '') {
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Tên bé là gì ??'
+                        })
+                    }else if(phone==''){
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Cho xin sdt nhé'
+                        })
+                    }else if(address==''){
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Địa chỉ ở đâu ?'
+                        })
+                    }else if(!phone.match(format)){
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Số ma !!!'
+                        })
+                    }else{
+                    }
+                });
+            });
+        }
         function logout() {
             $("#logoutbtn").click(function (e) {
                 e.preventDefault();
@@ -198,35 +260,35 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                     },
                     dataType: "JSON",
                     success: function (res) {
-                        if(res.check==true){
+                        if (res.check == true) {
 
 
-                        const brands = res.brands;
-                        const categrories = res.categrories;
-                        if (brands.length > 0) {
-                            var str = ``;
-                            brands.forEach(el => {
-                                str += `
+                            const brands = res.brands;
+                            const categrories = res.categrories;
+                            if (brands.length > 0) {
+                                var str = ``;
+                                brands.forEach(el => {
+                                    str += `
                                 <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
                                 `
-                            });
-                            $("#brandUl").html(str);
-                        }
-                        if (categrories.length > 0) {
-                            var str = ``;
-                            categrories.forEach(el => {
-                                str += `
-                                <li><a class="dropdown-item" href="categrories.html?id=`+el.id+`">`+ el.name + `</a></li>
-                                `
-                            });
-                            $("#cateUl").html(str);
-                        }
-                        if (res.result.length > 0) {
-                            var str = ``;
-                            var sum = 0;
-                            res.result.forEach((el, index) => {
-                                if (index % 2 == 0) {
+                                });
+                                $("#brandUl").html(str);
+                            }
+                            if (categrories.length > 0) {
+                                var str = ``;
+                                categrories.forEach(el => {
                                     str += `
+                                <li><a class="dropdown-item" href="categrories.html?id=`+ el.id + `">` + el.name + `</a></li>
+                                `
+                                });
+                                $("#cateUl").html(str);
+                            }
+                            if (res.result.length > 0) {
+                                var str = ``;
+                                var sum = 0;
+                                res.result.forEach((el, index) => {
+                                    if (index % 2 == 0) {
+                                        str += `
                                 <tr class="table-primary">
                                     <td class="table-borderless" scope="row">`+ (++index) + `</td>
                                     <td class="table-borderless"><img src="`+ el[3] + `" style="width:150px;height: auto;" alt=""></td>
@@ -237,8 +299,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                                     <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[5]) + `</td>
                                 </tr>
                                 `;
-                                } else {
-                                    str += `
+                                    } else {
+                                        str += `
                                 <tr class="table-secondary">
                                     <td class="table-borderless" scope="row">`+ (++index) + `</td>
                                     <td class="table-borderless"><img src="`+ el[3] + `" style="width:150px;height: auto;" alt=""></td>
@@ -248,31 +310,31 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                                     <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[5]) + `</td>
                                 </tr>
                                 `;
-                                }
+                                    }
 
-                                sum += el[5];
-                            });
-                            str += `
+                                    sum += el[5];
+                                });
+                                str += `
                             <tr class="table-dark">
                                 <td colspan='5' class="table-borderless" scope="row">Tổng tiền</td>
                                 <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(sum) + `</td>
 
                             </tr>
                             `
-                            $("#cartressult").html(str);
-                        }
-                        editQuantity();
-                    }else{
-                        str=`
+                                $("#cartressult").html(str);
+                            }
+                            editQuantity();
+                        } else {
+                            str = `
                         <tr class="table-dark">
                             <td colspan='6' class="table-borderless" scope="row">Chưa có sản phẩm</td>
                         </tr>
                         `;
-                        $("#cartressult").html(str);
-                    }
+                            $("#cartressult").html(str);
+                        }
                     }
                 });
-            }else{
+            } else {
                 window.location.replace('index.html?err=emtycart');
             }
         }
@@ -284,7 +346,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                 var cart = JSON.parse(localStorage.getItem('cart'));
                 if (qty == 0) {
                     Swal.fire({
-                        icon:'warning',
+                        icon: 'warning',
                         text: 'Xóa khỏi giỏ hàng?',
                         showDenyButton: true,
                         showCancelButton: false,
@@ -295,20 +357,20 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                         if (result.isConfirmed) {
                             var arr = [];
                             cart.forEach(el => {
-                                if(el[0]!=id){
+                                if (el[0] != id) {
                                     arr.push(el);
                                 }
                             });
-                            if(arr.length==0){
+                            if (arr.length == 0) {
                                 localStorage.removeItem('cart');
-                            }else{
+                            } else {
                                 localStorage.setItem('cart', JSON.stringify(arr));
                             }
 
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Đã xóa !'
-                            }).then(()=>{
+                            }).then(() => {
                                 loadCart()
                             })
 
@@ -317,7 +379,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                             loadCart();
                         }
                     })
-                }else{
+                } else {
                     cart.forEach(el => {
                         if (el[0] == id) {
                             el[1] = qty;

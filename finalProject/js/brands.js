@@ -22,7 +22,7 @@ function getData(url){
     }
     $.ajax({
         type: "GET",
-        url: api+"getCateProducts",
+        url: api+"getBrandProducts",
         data:{
             apitoken:localStorage.getItem('token'),
             id:id,
@@ -115,7 +115,7 @@ function searchPrice(id){
             case 'maxprice':
                 $.ajax({
                     type: "GET",
-                    url: api+"searchCatePrice",
+                    url: api+"searchBrandPrice",
                     data: {
                         apitoken:localStorage.getItem('token'),
                         price2:maxprice,
@@ -149,7 +149,7 @@ function searchPrice(id){
                 case 'minprice':
                     $.ajax({
                         type: "GET",
-                        url: api+"searchCatePrice",
+                        url: api+"searchBrandPrice",
                         data: {
                             apitoken:localStorage.getItem('token'),
                             price1:lowprice,
@@ -186,7 +186,7 @@ function searchPrice(id){
                     case 'pricebetween':
                         $.ajax({
                             type: "GET",
-                            url: api+"searchCatePrice",
+                            url: api+"searchBrandPrice",
                             data: {
                                 apitoken:localStorage.getItem('token'),
                                 price1:lowprice,

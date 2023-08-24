@@ -44,7 +44,7 @@ function getData(){
                 var str = ``;
                 brands.forEach(el => {
                     str += `
-                        <li><a class="dropdown-item" href="#">`+ el.name + `</a></li>
+                        <li><a class="dropdown-item" href="brands.html?id=`+el.id+`">`+ el.name + `</a></li>
                         `
                 });
                 $("#brandUl").html(str);

@@ -81,6 +81,7 @@
                     <a class="icon-cart" href="cart.html"><i class='bx bxs-cart'></i></a>
                     <input class="form-control me-2" type="search" id="searchProduct" placeholder="Search"
                         aria-label="Search">
+                    <button class="btn btn-outline-success" id="searchBtn">Search</button>
                 </form>
             </div>
         </div>
@@ -132,10 +133,12 @@
         $(document).ready(function () {
             login(); loadData(); showMore();
             logout();getError();
-
+            searchProducts();
         });
 
         const url = 'https://students.trungthanhweb.com/api/';
+        // =======================================
+        var link = url + 'home'; //string 
         // ===========Global Constant=============
         const Toast = Swal.mixin({
             toast: true,
@@ -227,9 +230,108 @@
                 });
             });
         }
+        // =======================================
+        function searchProducts(){
+            $("#searchBtn").click(function (e) { 
+                e.preventDefault();
+                var name = $("#searchProduct").val().trim();
+                if(name!=''){
+                    $.ajax({
+                        type: "GET",
+                        url: url+"getSearchProducts",
+                        data: {
+                            apitoken:localStorage.getItem('token'),
+                            name:name
+                        },
+                        dataType: "JSON",
+                        success: function (res) {
+                            if(res.check==true){
+                                if(res.result.length>0){
+                                    var products = res.result;
+                                    var str = ``;
+                                    products.forEach(el => {
+                                        str += `
+                                            <div class="col-md-3 mb-3">
+                                                <div class="card" style="width: 100%;">
+                                                    <img class="productImage"  src="https://students.trungthanhweb.com/images/`+ el['image'] + `">
+                                                    <div class="card-body">
+                                                        <a href="#">
+                                                        <h5 class="card-title">`+ el.name + `</h5></a>
+                                                        <p class="card-text">
+                                                            Giá : `+ Intl.NumberFormat('en-US').format(el.price) + `    
+                                                        </p>
+                                                        <p>Loại sản phẩm : `+ el.catename + `</p>
+                                                        <p>Thương hiệu : `+ el.brandname + `</p>
+                                                        <a href="detail.html?id=`+ el.id + `" class="btn btn-primary chitietBtn"
+                                                        data-id="`+ el.id + `">Chi tiết</a>
+                                                        <button class="btn btn-success addToCartBtn" data-id=`+ el.id + `>Thêm</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            `;
+                                    });
+                                    $("#resultProduct").html(str);
+                                    $("#showmorebtn").hide();
+                                }else{
+                                    var str =``;
+                                    str+=`
+                                    <h4 class="text-center text-danger ">Không có sản phẩm</h4>
+                                    `;
+                                    $("#resultProduct").html(str);
+                                    $("#showmorebtn").hide();
 
-        // ================================
-        var link = url + 'home'; //string 
+                                }
+                            }
+                        }
+                    });
+                }else{
+                    $.ajax({
+                        type: "GET",
+                        url: url+"getSearchProducts",
+                        data: {
+                            apitoken:localStorage.getItem('token'),
+                        },
+                        dataType: "JSON",
+                        success: function (res) {
+                            if(res.check==true){
+                                console.log(res);
+                                if(res.result.data && res.result.data.length>0){
+                                    const products  = res.result.data;
+                                    var str = ``;
+                                    products.forEach(el => {
+                                        str += `
+                                            <div class="col-md-3 mb-3">
+                                                <div class="card" style="width: 100%;">
+                                                    <img class="productImage"  src="https://students.trungthanhweb.com/images/`+ el['image'] + `">
+                                                    <div class="card-body">
+                                                        <a href="#">
+                                                        <h5 class="card-title">`+ el.name + `</h5></a>
+                                                        <p class="card-text">
+                                                            Giá : `+ Intl.NumberFormat('en-US').format(el.price) + `    
+                                                        </p>
+                                                        <p>Loại sản phẩm : `+ el.catename + `</p>
+                                                        <p>Thương hiệu : `+ el.brandname + `</p>
+                                                        <a href="detail.html?id=`+ el.id + `" class="btn btn-primary chitietBtn"
+                                                        data-id="`+ el.id + `">Chi tiết</a>
+                                                        <button class="btn btn-success addToCartBtn" data-id=`+ el.id + `>Thêm</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            `;
+                                    });
+                                    $("#resultProduct").html(str);
+                                    $("#showmorebtn").show();
+                                }
+                            };
+
+                }
+            });
+        };
+
+            })
+        }
+            // ================================
+
         // ================================
         function loadData() {
             $("#logoutbtn").hide();
@@ -260,7 +362,7 @@
                         var str = ``;
                         brands.forEach(el => {
                             str += `
-                                <li><a class="dropdown-item" href="">`+ el.name + `</a></li>
+                                <li><a class="dropdown-item" href="brands.html?id=`+el.id+`">`+ el.name + `</a></li>
                                 `
                         });
                         $("#brandUl").html(str);
