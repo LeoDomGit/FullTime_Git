@@ -8,10 +8,10 @@ function checkLogin(){
     }
 }
 const api='https://students.trungthanhweb.com/api/';
-
+const image='https://students.trungthanhweb.com/images/'
 function getData(url){
     const params = new URLSearchParams(window.location.search);
-    const image='https://students.trungthanhweb.com/images/'
+   
     if(!params.has('id')){
         window.location.replace('index.html');
     }
@@ -41,7 +41,7 @@ function getData(url){
                             `
                     });
                     $("#brandUl").html(str);
-                }
+                }   
                 if (categrories.length > 0) {
                     var str = ``;
                     categrories.forEach(el => {
@@ -88,12 +88,147 @@ function getData(url){
                         i++;
                     }
                     $("#pagination").html(str);
+                    $("#searchPricebtn").click(function (e) { 
+                        e.preventDefault();
+                        searchPrice(id);
+
+                    });
+
                 }
 
             }
         }
     });
 }
+function searchPrice(id){
+        var lowprice = $("#giathap").val();
+        var maxprice = $("#giacao").val();
+        var option='';
+        if(lowprice==''&&maxprice!=''){
+            option='maxprice';
+        }else if(lowprice!=''&&maxprice==''){
+            option='minprice';
+        }else if(lowprice!='' && maxprice!=''){
+            option='pricebetween';
+        }
+        switch (option) {
+            case 'maxprice':
+                $.ajax({
+                    type: "GET",
+                    url: api+"searchCatePrice",
+                    data: {
+                        apitoken:localStorage.getItem('token'),
+                        price2:maxprice,
+                        id:id
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        if(res.check==true && res.products.length>0){
+                            var str =``;
+                            res.products.forEach(el => {
+                                    str+=`
+                                    <div class="col-md-4 mb-3">
+                                    <div class="card w-100 pt-3">
+                                        <img style="width:300px;height:auto;margin:0px auto" src="`+image+el.image+`" class="card-img-top" alt="...">
+                                        <div class="card-body ps-3">
+                                            <h5 class="card-title">`+el.name+`</h5>
+                                            <p class="card-text">Giá : `+Intl.NumberFormat('en-US').format(el.price)+`</p>
+                                            <a href="#" class="btn btn-primary">Xem thêm</a>
+                                            <a href="#" class="btn btn-success">Mua ngay</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    `;
+                                });
+                                $("#resultProduct").html(str);
+                        }
+                    }
+                });
+                
+                break;
+                case 'minprice':
+                    $.ajax({
+                        type: "GET",
+                        url: api+"searchCatePrice",
+                        data: {
+                            apitoken:localStorage.getItem('token'),
+                            price1:lowprice,
+                            id:id
+                        },
+                        dataType: "JSON",
+                        success: function (res) {
+                            if(res.check==true&& res.products.length>0){
+                                var str =``;
+                                res.products.forEach(el => {
+
+                                        str+=`
+                                        <div class="col-md-4 mb-3">
+                                        <div class="card w-100 pt-3">
+                                            <img style="width:300px;height:auto;margin:0px auto" src="`+image+el.image+`" class="card-img-top" alt="...">
+                                            <div class="card-body ps-3">
+                                                <h5 class="card-title">`+el.name+`</h5>
+                                                <p class="card-text">Giá : `+Intl.NumberFormat('en-US').format(el.price)+`</p>
+                                                <a href="#" class="btn btn-primary">Xem thêm</a>
+                                                <a href="#" class="btn btn-success">Mua ngay</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        `;
+                                    }); 
+                                    console.log(str);
+                                    $("#resultProduct").html(str);
+                            }
+                        }
+                    });
+
+    
+                    break;
+                    case 'pricebetween':
+                        $.ajax({
+                            type: "GET",
+                            url: api+"searchCatePrice",
+                            data: {
+                                apitoken:localStorage.getItem('token'),
+                                price1:lowprice,
+                                price2:maxprice,
+                                id:id
+                            },
+                            dataType: "JSON",
+                            success: function (res) {
+                                if(res.check==true){
+                                    var str =``;
+                                    res.products.forEach(el => {
+                                            str+=`
+                                            <div class="col-md-4 mb-3">
+                                            <div class="card w-100 pt-3">
+                                                <img style="width:300px;height:auto;margin:0px auto" src="`+image+el.image+`" class="card-img-top" alt="...">
+                                                <div class="card-body ps-3">
+                                                    <h5 class="card-title">`+el.name+`</h5>
+                                                    <p class="card-text">Giá : `+Intl.NumberFormat('en-US').format(el.price)+`</p>
+                                                    <a href="#" class="btn btn-primary">Xem thêm</a>
+                                                    <a href="#" class="btn btn-success">Mua ngay</a>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            `;
+                                        });
+                                        $("#resultProduct").html(str);
+                                }
+                            }
+                        });
+    
+
+        
+                        break;
+            default:
+                break;
+        }
+        $("#pagination").hide();
+}
+
+
+
+// =================================================
 function logout() {
     $("#logoutbtn").click(function (e) {
         e.preventDefault();
