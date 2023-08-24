@@ -302,3 +302,6 @@ img{
 table tr td{
     border: none;
 }
+.hideclass{
+    display: none;
+}

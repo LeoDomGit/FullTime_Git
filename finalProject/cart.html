@@ -180,6 +180,31 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                             title: 'Số ma !!!'
                         })
                     }else{
+                        $("#submitCheckOut").attr('disabled','disabled');
+                        var cart = JSON.parse(localStorage.getItem('cart'));
+                        $.ajax({
+                            type: "post",
+                            url: url+"createBill",
+                            data: {
+                                tenKH:tenKH,
+                                phone:phone,
+                                address:address,
+                                cart:cart,
+                                api_token:localStorage.getItem('token')
+                            },
+                            dataType: "JSON",
+                            success: function (res) {
+                                if(res.check==true){
+                                    Toast.fire({
+                                        icon: 'warning',
+                                        title: 'Đặt hàng thành công'
+                                    }).then(()=>{
+                                        localStorage.removeItem('cart');
+                                        window.location.replace('index.html');
+                                    })
+                                }
+                            }
+                        });
                     }
                 });
             });
