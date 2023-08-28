@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    logout();checkLogin();getData()
+    logout();checkLogin();getData(),addToCart()
 });
 
 function checkLogin(){
@@ -7,6 +7,17 @@ function checkLogin(){
         window.location.replace('index.html');
     }
 }
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 1700,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
 const api='https://students.trungthanhweb.com/api/';
 const image='https://students.trungthanhweb.com/images/'
 function getData(url){
@@ -62,8 +73,8 @@ function getData(url){
                             <div class="card-body ps-3">
                               <h5 class="card-title">`+el.name+`</h5>
                               <p class="card-text">Giá : `+Intl.NumberFormat('en-US').format(el.price)+`</p>
-                              <a href="#" class="btn btn-primary">Xem thêm</a>
-                              <a href="#" class="btn btn-success">Mua ngay</a>
+                              <a href="detail.html?id=`+ el.id + `" class="btn btn-primary">Xem thêm</a>
+                              <a href="#" class="btn btn-success addToCartBtn" data-id="`+el.id+`">Mua ngay</a>
                             </div>
                           </div>
                     </div>
@@ -91,11 +102,11 @@ function getData(url){
                     $("#searchPricebtn").click(function (e) { 
                         e.preventDefault();
                         searchPrice(id);
-
+                        addToCart()
                     });
-
+                    addToCart()
                 }
-
+                addToCart()
             }
         }
     });
@@ -133,15 +144,17 @@ function searchPrice(id){
                                         <div class="card-body ps-3">
                                             <h5 class="card-title">`+el.name+`</h5>
                                             <p class="card-text">Giá : `+Intl.NumberFormat('en-US').format(el.price)+`</p>
-                                            <a href="#" class="btn btn-primary">Xem thêm</a>
-                                            <a href="#" class="btn btn-success">Mua ngay</a>
+                                            <a href="detail.html?id=`+ el.id + `" class="btn btn-primary">Xem thêm</a>
+                                            <a href="#" class="btn btn-success addToCartBtn" data-id="`+el.id+`">Mua ngay</a>
                                         </div>
                                         </div>
                                     </div>
                                     `;
                                 });
                                 $("#resultProduct").html(str);
+                                addToCart()
                         }
+
                     }
                 });
                 
@@ -168,8 +181,8 @@ function searchPrice(id){
                                             <div class="card-body ps-3">
                                                 <h5 class="card-title">`+el.name+`</h5>
                                                 <p class="card-text">Giá : `+Intl.NumberFormat('en-US').format(el.price)+`</p>
-                                                <a href="#" class="btn btn-primary">Xem thêm</a>
-                                                <a href="#" class="btn btn-success">Mua ngay</a>
+                                                <a href="detail.html?id=`+ el.id + `" class="btn btn-primary">Xem thêm</a>
+                                                <a href="#" class="btn btn-success addToCartBtn" data-id="`+el.id+`">Mua ngay</a>
                                             </div>
                                             </div>
                                         </div>
@@ -177,7 +190,9 @@ function searchPrice(id){
                                     }); 
                                     console.log(str);
                                     $("#resultProduct").html(str);
+                                    addToCart()
                             }
+                            
                         }
                     });
 
@@ -205,15 +220,17 @@ function searchPrice(id){
                                                 <div class="card-body ps-3">
                                                     <h5 class="card-title">`+el.name+`</h5>
                                                     <p class="card-text">Giá : `+Intl.NumberFormat('en-US').format(el.price)+`</p>
-                                                    <a href="#" class="btn btn-primary">Xem thêm</a>
-                                                    <a href="#" class="btn btn-success">Mua ngay</a>
+                                                    <a href="detail.html?id=`+ el.id + `" class="btn btn-primary">Xem thêm</a>
+                                                    <a href="#" class="btn btn-success addToCartBtn" data-id="`+el.id+`">Mua ngay</a>
                                                 </div>
                                                 </div>
                                             </div>
                                             `;
                                         });
                                         $("#resultProduct").html(str);
+                                        addToCart()
                                 }
+
                             }
                         });
     
@@ -226,7 +243,36 @@ function searchPrice(id){
         $("#pagination").hide();
 }
 
+function addToCart() {
+    if (!localStorage.getItem("cart") || localStorage.getItem('cart') == null) {
+        var arr = [];
+    } else {
+        var cart = localStorage.getItem('cart');
+        var arr = JSON.parse(cart);
+    }
 
+    $(".addToCartBtn").click(function (e) {
+        e.preventDefault();
+        var id = Number($(this).attr('data-id'));
+        var qty = 1;
+        var item = [id, qty];
+        var check = 0;
+        arr.forEach(el => {
+            if (el[0] == id) {
+                el[1]++;
+                check = 1;
+            }
+        });
+        if (check == 0) {
+            arr.push(item);
+        }
+        localStorage.setItem('cart', JSON.stringify(arr));
+        Toast.fire({
+            icon: 'success',
+            title: 'Đã thêm thành công'
+        })
+    });
+}
 
 // =================================================
 function logout() {

@@ -4,6 +4,17 @@ $(document).ready(function () {
 const url = 'https://students.trungthanhweb.com/api/';      
 var link = url + 'home'; //string 
 const image = 'https://students.trungthanhweb.com/images/';
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 1700,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
 function loadData(){
     $("#logoutbtn").hide();
     if (localStorage.getItem('token') && localStorage.getItem('token') != null) {
@@ -45,13 +56,14 @@ function loadData(){
             type: "GET",
             url: url+"bills",
             data: {
-                api_token:localStorage.getItem('token')
+                apitoken:localStorage.getItem('token')
             },
             dataType: "JSON",
             success: function (res) {
                 if(res.check==true &&res.bills.length>0){
                     var str = ``;
                     const bills = res.bills;
+                    console.log(bills);
                     bills.forEach(el => {
                         str+=`
                         <li class="list-group-item billdetailselect pointer" data-id="`+el.id+`">`+el.tenKH+` <br>
@@ -77,7 +89,7 @@ function billdetail(){
             type: "GET",
             url: url+"singlebill",
             data: {
-                api_token:localStorage.getItem('token'),
+                apitoken:localStorage.getItem('token'),
                 id:id
             },
             dataType: "JSON",

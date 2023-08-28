@@ -116,6 +116,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                         <th scope="col">Giá</th>
                         <th scope="col" style="width:10%">Số lượng</th>
                         <th scope="col">Thành tiền</th>
+                        <th scope="col">Xóa</th>
 
                     </tr>
                 </thead>
@@ -164,41 +165,41 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                             icon: 'warning',
                             title: 'Tên bé là gì ??'
                         })
-                    }else if(phone==''){
+                    } else if (phone == '') {
                         Toast.fire({
                             icon: 'warning',
                             title: 'Cho xin sdt nhé'
                         })
-                    }else if(address==''){
+                    } else if (address == '') {
                         Toast.fire({
                             icon: 'warning',
                             title: 'Địa chỉ ở đâu ?'
                         })
-                    }else if(!phone.match(format)){
+                    } else if (!phone.match(format)) {
                         Toast.fire({
                             icon: 'warning',
                             title: 'Số ma !!!'
                         })
-                    }else{
-                        $("#submitCheckOut").attr('disabled','disabled');
+                    } else {
+                        $("#submitCheckOut").attr('disabled', 'disabled');
                         var cart = JSON.parse(localStorage.getItem('cart'));
                         $.ajax({
                             type: "post",
-                            url: url+"createBill",
+                            url: url + "createBill",
                             data: {
-                                tenKH:tenKH,
-                                phone:phone,
-                                address:address,
-                                cart:cart,
-                                api_token:localStorage.getItem('token')
+                                tenKH: tenKH,
+                                phone: phone,
+                                address: address,
+                                cart: cart,
+                                api_token: localStorage.getItem('token')
                             },
                             dataType: "JSON",
                             success: function (res) {
-                                if(res.check==true){
+                                if (res.check == true) {
                                     Toast.fire({
                                         icon: 'warning',
                                         title: 'Đặt hàng thành công'
-                                    }).then(()=>{
+                                    }).then(() => {
                                         localStorage.removeItem('cart');
                                         window.location.replace('index.html');
                                     })
@@ -286,8 +287,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                     dataType: "JSON",
                     success: function (res) {
                         if (res.check == true) {
-
-
                             const brands = res.brands;
                             const categrories = res.categrories;
                             if (brands.length > 0) {
@@ -320,8 +319,11 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                                     <td class="table-borderless">`+ el[1] + `</td>
                                     <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[2]) + `</td>
                                     <td  class="table-borderless"> <input type="number" class="form-control qtyinput" value="`+ el[4] + `" data-id="` + el[0] + `" ></td>
-
-                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[5]) + `</td>
+                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[6]) + `</td>
+                                    <td>
+                                        <button class="btn-sm btn-danger deleteCartItem" data-id="`+ Number(el[0]) + `">Xóa </button>
+                                    </td>
+                                    <
                                 </tr>
                                 `;
                                     } else {
@@ -332,27 +334,32 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                                     <td class="table-borderless">`+ el[1] + `</td>
                                     <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[2]) + `</td>
                                     <td  class="table-borderless"> <input type="number" class="form-control qtyinput" value="`+ el[4] + `" data-id="` + el[0] + `" ></td>
-                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[5]) + `</td>
+                                    <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(el[6]) + `</td>
+                                    <td>
+                                        <button class="btn-sm btn-danger deleteCartItem" data-id="`+ Number(el[0]) + `">Xóa </button>
+                                    </td>   
                                 </tr>
                                 `;
                                     }
 
-                                    sum += el[5];
+                                    sum += el[6];
                                 });
                                 str += `
                             <tr class="table-dark">
                                 <td colspan='5' class="table-borderless" scope="row">Tổng tiền</td>
                                 <td class="table-borderless">`+ Intl.NumberFormat('en-US').format(sum) + `</td>
+                                <td class="table-borderless" scope="row"></td>
 
                             </tr>
                             `
                                 $("#cartressult").html(str);
                             }
                             editQuantity();
+                            deleteCart();
                         } else {
                             str = `
                         <tr class="table-dark">
-                            <td colspan='6' class="table-borderless" scope="row">Chưa có sản phẩm</td>
+                            <td colspan='7' class="table-borderless" scope="row">Chưa có sản phẩm</td>
                         </tr>
                         `;
                             $("#cartressult").html(str);
@@ -362,6 +369,46 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
             } else {
                 window.location.replace('index.html?err=emtycart');
             }
+        }
+        function deleteCart() {
+            $(".deleteCartItem").click(function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    icon:'question',
+                    text: 'Xóa sản phẩm khỏi giỏ hàng?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: 'Xóa',
+                    denyButtonText: `Không`,
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    var id = $(this).attr('data-id');
+                        var arr = [];
+                        console.log(id);
+                        var cart = JSON.parse(localStorage.getItem('cart'));
+                        cart.forEach(el => {
+                            if (el[0] != id) {
+                                arr.push(el);
+                            }
+                        });
+                        if(arr.length==0){
+                            localStorage.removeItem('cart');
+                        }else{
+                            localStorage.setItem('cart', JSON.stringify(arr));
+                        }
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Đã xóa khỏi giỏ hàng'
+                        }).then(()=>{
+                            loadCart();
+                        })
+                } else if (result.isDenied) {
+                   
+                }
+                })
+                
+            });
         }
         function editQuantity() {
             $(".qtyinput").change(function (e) {
