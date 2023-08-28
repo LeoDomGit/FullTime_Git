@@ -1,0 +1,34 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.container{
+    width: 100%
+}
+.menu{
+    width: 100%;
+    background-color: black;
+    color:white
+}
+.main{
+    width: 100%;
+    background-color: brown;
+    display: flex;
+    min-height: 400px;
+}
+.sidebar{
+    width: 30%;
+    background-color: yellow;
+
+}
+.maincontainer{
+    width:70%;
+    background-color: yellowgreen;
+
+}
+.footer{
+    background-color: grey;
+    color: white;
+    min-height: 40px;
+}
