@@ -81,21 +81,83 @@ a{
     /* background-color: brown; */
     display: flex;
     min-height: 400px;
+    margin-top: 20px;
 }
 .sidebar{
     width: 30%;
     /* background-color: yellow; */
+    border-right: 1px solid green;
+}
+.sidebar>ul{
+    width: 97%;
 
+}
+.sidebar>ul>li{
+    height: 40px;
+    margin-bottom: 10px;
+    background-color: grey;
+    border-radius: 0px 0px 7px 7px ;
+    color: white;
+    text-align: center;
+    padding-top: 10px;
+}
+.sidebar>ul>li>a{
+    color: white;
 }
 .maincontainer{
     width:70%;
+    padding-left: 10px;
     /* background-color: yellowgreen; */
 
+}
+.maincontainer>.row{
+    width: 100%;
+    display: flex;
+}
+.productItem{
+    width:24%;
+    margin-bottom: 30px;
+    margin-right: 1%;
+    box-shadow: 3px 3px 3px 1px grey;
+    padding-bottom: 12px;
+    border-radius: 12px;
+}
+.productItem>.row:first-child{
+    width: 100%;
+}
+.productItem>.row:first-child>img{
+    width: 99%;
+    /* Canh giữa */
+    margin: 0px auto;
+}
+.productItem>.row:nth-child(2){
+    margin-top: 14px;
+    width: 100%;
+    padding-left: 10%;
+}
+.productItem>.row:nth-child(2) h5{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+.productItem>.row:last-child{
+    margin-top: 12px;
+    padding-left: 10%;
+}
+.productItem>.row:last-child button{
+    padding: 10px 35px;
+    border:1px solid rgb(100, 206, 251);
+    border-radius: 7px;
+    cursor: pointer;
+    background: none;
+}
+.productItem>.row:last-child button:hover{
+    background: rgb(100, 206, 251);
 }
 .footer{
     background-color: grey;
     color: white;
     min-height: 40px;
+
 }
 
 
