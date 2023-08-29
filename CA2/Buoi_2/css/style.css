@@ -1,0 +1,101 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.container{
+    width: 100%
+}
+a{
+    text-decoration: none;
+}
+.menu{
+    width: 100%;
+    background-color: black;
+    color:white;
+    display: flex;
+}
+.menu a{
+    color:white
+}
+.menu a:hover{
+    color:yellow
+}
+.submenuProduct a{
+    color:black
+}
+.submenuProduct a:hover{
+    color:red
+}
+/* ======================== */
+
+.menu_ul{
+    display: flex;
+    list-style: none;
+    line-height: 40px;
+    width: 80%;
+}
+.menu_ul > li{
+    margin-right: 30px;
+}
+.menu_ul:first-child{
+    margin-left: 20px;
+}
+/* =================== */
+.searchBox{
+    width: 20%;
+    padding-top: 4px;
+}
+.searchBox>.searchIpt{
+    padding: 4px 5px;
+    height: 30px;
+    width: 70%;
+}
+.searchBox>.searchBtn{
+    width: 26%;
+    height: 30px;
+    cursor: pointer;
+}
+.productli{
+    position: relative;
+    padding-right: 20px;
+}
+.submenuProduct{
+    position: absolute;
+    color: black;
+    list-style: none;
+    width: 100px;
+    background-color: rgb(232, 232, 232);
+    border-radius: 0px 0px 7px 7px;
+    display: none;
+}
+.submenuProduct>li{
+    line-height: 40px;
+    padding-left: 10px;
+}
+.productli:hover .submenuProduct{
+    display: block;
+}
+.main{
+    width: 100%;
+    /* background-color: brown; */
+    display: flex;
+    min-height: 400px;
+}
+.sidebar{
+    width: 30%;
+    /* background-color: yellow; */
+
+}
+.maincontainer{
+    width:70%;
+    /* background-color: yellowgreen; */
+
+}
+.footer{
+    background-color: grey;
+    color: white;
+    min-height: 40px;
+}
+
+
