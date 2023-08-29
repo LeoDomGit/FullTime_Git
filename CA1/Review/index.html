@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="postBlock">
+
+    </div>
+    <script>
+        var postApi = 'https://jsonplaceholder.typicode.com/post';
+
+        fetch(postApi)
+            //case lấy postApi thành công
+            .then(function (response) {
+                //nhờ có fetch : response.json() nhận json postApi của promise chuyển đổi dữ liệu từ json -> js
+                // là 1 array gồm nhiều bản ghi về post( bài viết)
+                return response.json();
+            })
+            .then(function (posts) {
+                console.log(posts);
+                let htmls = posts.map(function (post) {
+                    return `<li>
+                <h2>${post.title}</h2>
+                <p>${post.body}</p>
+            </li>`;
+                });
+
+                let html = htmls.join('');
+                document.getElementById('postBlock').innerHTML = html;
+            })
+            //case lấy postApi thất bại
+            .catch(function (err) {
+                console.log(err);
+            })
+    </script>
+</body>
+
+</html>
