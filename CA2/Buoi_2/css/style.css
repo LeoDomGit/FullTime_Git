@@ -58,7 +58,7 @@ a{
 }
 .productli{
     position: relative;
-    padding-right: 20px;
+    padding-right: 0px;
 }
 .submenuProduct{
     position: absolute;
@@ -72,6 +72,10 @@ a{
 .submenuProduct>li{
     line-height: 40px;
     padding-left: 10px;
+}
+.productli:hover{
+    padding-right: 20px;
+    transition: ease-in-out 0.5s;
 }
 .productli:hover .submenuProduct{
     display: block;
@@ -159,5 +163,26 @@ a{
     min-height: 40px;
 
 }
+.footer>.row{
+    width: 100%;
+    display: flex;
+}
 
+.footer>.row>.col:first-child{
+    width:70%;
+    padding: 10% 3%
+}
+.footer ul{
+    list-style: none;
+}
+.footer>.row>.col:first-child>ul>li{
+    line-height: 40px;
+}
+.footer>.row>.col:last-child{
+    width: 29%;
+    margin-left: 1%;
+}
+.footer>.row>.col:last-child>iframe{
+    width: 100%;
+}
 
