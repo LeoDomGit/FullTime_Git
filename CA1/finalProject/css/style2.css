@@ -290,14 +290,29 @@ td{
 
 @media screen and (max-width:900px){
 img{max-width: 100%;}
+.desktopcart{
+    display: none;
+}
+.mobicart{
+    display: block;
+}
+}
+@media screen and (min-width:1000px) {
+    .desktopcart{
+        display: block;
+    }
+    .mobicart{
+        display: none;
+    }
 }
 @media screen and(min-width:900px) and (max-width:1190px) {
-img{
-    max-width: 100%;
-}
-.card-content {
-    min-height: 125px;
-}
+        img{
+            max-width: 100%;
+        }
+        .card-content {
+            min-height: 125px;
+        }
+
 }
 table tr td{
     border: none;

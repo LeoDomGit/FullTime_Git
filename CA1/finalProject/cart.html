@@ -106,7 +106,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
         </div>
     </nav>
     <div class="container mt-4">
-        <div class="table-responsive">
+        <div class="table-responsive desktopcart">
             <table class="table ">
                 <thead class="table-dark">
                     <tr>
@@ -124,6 +124,11 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
 
                 </tbody>
             </table>
+        </div>
+        <div class="mobicart">
+            <div class="accordion accordion-flush" id="accordionFlushCart">
+               
+            </div>
         </div>
         <div class="row">
             <div class="col-md-2">
@@ -309,7 +314,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                             }
                             if (res.result.length > 0) {
                                 var str = ``;
+                                var str2 = ``;
                                 var sum = 0;
+                                var i=0;
                                 res.result.forEach((el, index) => {
                                     if (index % 2 == 0) {
                                         str += `
@@ -326,6 +333,30 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                                     <
                                 </tr>
                                 `;
+                                        str2 += `
+                                        <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-heading`+(i)+`">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse`+(i)+`" aria-expanded="false" aria-controls="flush-collapse`+(i)+`">
+                                        <h4>`+ el[1] + `</h4>
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapse`+(i)+`" class="accordion-collapse collapse" aria-labelledby="flush-heading`+(i)+`" data-bs-parent="#accordionFlushCart">
+                                        <div class="accordion-body">
+                                            <img src="`+ el[3] + `" alt="" class="w-50">
+                                            <h4>Tên sản phẩm : `+ el[1] + `</h4>
+                                            <h4>Giá : `+ Intl.NumberFormat('en-US').format(el[5]) + `</h4>
+                                            <div class="mb-3">
+                                            <label for="" class="form-label">Số lượng</label>
+                                            <input type="number" class="form-control qtyinput" value="`+ el[4] + `" data-id="` + el[0] + `" >
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="" class="form-label">Thành tiền</label>
+                                                <input type="text" readonly name="" id=""  value="`+Intl.NumberFormat('en-US').format(el[6])+`" class="form-control">
+                                            </div>
+                                        </div>
+                                </div>
+                                </div>
+                                `
                                     } else {
                                         str += `
                                 <tr class="table-secondary">
@@ -340,9 +371,35 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                                     </td>   
                                 </tr>
                                 `;
+                                str2 += `
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-heading`+(i)+`">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse`+(i)+`" aria-expanded="false" aria-controls="flush-collapse`+(i)+`">
+                                        <h4>`+ el[1] + `</h4>
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapse`+(i)+`" class="accordion-collapse collapse" aria-labelledby="flush-heading`+(i)+`" data-bs-parent="#accordionFlushCart">
+                                        <div class="accordion-body">
+                                            <img src="`+ el[3] + `" alt="" class="w-50">
+                                            <h4>Tên sản phẩm : `+ el[1] + `</h4>
+                                            <h4>Giá : `+ Intl.NumberFormat('en-US').format(el[5]) + `</h4>
+                                            <div class="mb-3">
+                                            <label for="" class="form-label">Số lượng</label>
+                                            <input type="number" class="form-control qtyinput" value="`+ el[4] + `" data-id="` + el[0] + `" >
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="" class="form-label">Thành tiền</label>
+                                                <input type="text" readonly name="" id=""  value="`+Intl.NumberFormat('en-US').format(el[6])+`" class="form-control">
+                                            </div>
+                                        </div>
+                                </div>
+                                </div>
+                                `
+                                console.log();
                                     }
 
                                     sum += el[6];
+                                    i++;
                                 });
                                 str += `
                             <tr class="table-dark">
@@ -352,7 +409,15 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
 
                             </tr>
                             `
+                                str2+=`
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Tổng tiền</label>
+                                    <input type="text" name="" id="" readonly class="form-control" value="`+ Intl.NumberFormat('en-US').format(sum) + `" placeholder="" aria-describedby="helpId">
+                                </div>
+                                `;
                                 $("#cartressult").html(str);
+                                $("#accordionFlushCart").html(str2);
+
                             }
                             editQuantity();
                             deleteCart();
@@ -363,6 +428,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                         </tr>
                         `;
                             $("#cartressult").html(str);
+
                         }
                     }
                 });
@@ -374,16 +440,16 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
             $(".deleteCartItem").click(function (e) {
                 e.preventDefault();
                 Swal.fire({
-                    icon:'question',
+                    icon: 'question',
                     text: 'Xóa sản phẩm khỏi giỏ hàng?',
                     showDenyButton: true,
                     showCancelButton: false,
                     confirmButtonText: 'Xóa',
                     denyButtonText: `Không`,
                 }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    var id = $(this).attr('data-id');
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        var id = $(this).attr('data-id');
                         var arr = [];
                         console.log(id);
                         var cart = JSON.parse(localStorage.getItem('cart'));
@@ -392,22 +458,22 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js
                                 arr.push(el);
                             }
                         });
-                        if(arr.length==0){
+                        if (arr.length == 0) {
                             localStorage.removeItem('cart');
-                        }else{
+                        } else {
                             localStorage.setItem('cart', JSON.stringify(arr));
                         }
                         Toast.fire({
                             icon: 'success',
                             title: 'Đã xóa khỏi giỏ hàng'
-                        }).then(()=>{
+                        }).then(() => {
                             loadCart();
                         })
-                } else if (result.isDenied) {
-                   
-                }
+                    } else if (result.isDenied) {
+
+                    }
                 })
-                
+
             });
         }
         function editQuantity() {
