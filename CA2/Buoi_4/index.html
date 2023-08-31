@@ -5,29 +5,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nguyễn Lê Trung Thành</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
     <div class="container">
         <nav class="menu">
-            <ul class="menu_ul">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li class="productli"><a href="#">Products</a>
-                    <ul class="submenuProduct">
-                        <li><a href="#">Tất cả</a></li>
-                        <li><a href="#">IPhone</a></li>
+            <div class="col">
+                <ul class="menu_ul">
+                    <li><a href="#">Navbar</a></li>
 
-                    </ul>
-                </li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-
-            <div class="searchBox">
-                <input type="text" class="searchIpt">
-                <button class="searchBtn">Tìm kiếm</button>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li class="productli"><a href="#">Products</a>
+                        <ul class="submenuProduct">
+                            <li><a href="#">Tất cả</a></li>
+                            <li><a href="#">IPhone</a></li>
+    
+                        </ul>
+                    </li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+    
+                <div class="searchBox">
+                    <input type="text" class="searchIpt">
+                    <button class="searchBtn">Tìm kiếm</button>
+                </div>
+            </div>
+            <div class="col">
+                <button class="tooglebtn" id="tooglebtn">
+                    <i class='bx bx-menu'></i>
+                </button>
             </div>
         </nav>
         <div class="main">
@@ -46,7 +56,7 @@
                 <div class="row">
                     <div class="productItem">
                         <div class="row">
-                            <img src="https://shopdunk.com/images/thumbs/0007808_iphone-14-pro-max-128gb_240.png"
+                            <img src="https://cdn2.cellphones.com.vn/x358,webp,q100/media/catalog/product/x/_/x_m_24.png"
                                 alt="">
                         </div>
                         <div class="row">
@@ -60,7 +70,7 @@
                     </div>
                     <div class="productItem">
                         <div class="row">
-                            <img src="https://shopdunk.com/images/thumbs/0008734_iphone-14-pro-128gb_240.png" alt="">
+                            <img src="https://cdn2.cellphones.com.vn/x358,webp,q100/media/catalog/product/v/_/v_ng_18.png" alt="">
                         </div>
                         <div class="row">
                             <h5>IPhone 14 Pro 128Gb</h5>
@@ -73,7 +83,7 @@
                     </div>
                     <div class="productItem">
                         <div class="row">
-                            <img src="https://shopdunk.com/images/thumbs/0009181_iphone-14-128gb_240.png" alt="">
+                            <img src="https://cdn2.cellphones.com.vn/x358,webp,q100/media/catalog/product/b/_/b_c_1_9.png" alt="">
                         </div>
                         <div class="row">
                             <h5>IPhone 14 Pro Max</h5>
@@ -171,6 +181,19 @@
             </div>
         </footer>
     </div>
+    <script>
+        const tooglebtn = document.getElementById("tooglebtn");
+        var count=0;
+        tooglebtn.addEventListener("click",()=>{
+            if(count==0){
+                document.getElementsByClassName('menu')[0].style.height="300px";
+                count=1;
+            }else{
+                document.getElementsByClassName('menu')[0].style.height="40px";
+                count=0
+            }
+        })
+    </script>
 </body>
 
 </html>
