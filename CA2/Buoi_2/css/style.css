@@ -9,6 +9,11 @@
 a{
     text-decoration: none;
 }
+@media screen and (min-width:1100px) {
+    .togglemenu{
+        display: none;
+    }
+}
 .menu{
     width: 100%;
     background-color: black;
@@ -186,3 +191,6 @@ a{
     width: 100%;
 }
 
+/* @media screen and () {
+    
+} */
