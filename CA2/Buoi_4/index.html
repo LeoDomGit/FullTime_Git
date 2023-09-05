@@ -182,16 +182,21 @@
         </footer>
     </div>
     <script>
+        // Biến số 
+        // Hắng số 
         const tooglebtn = document.getElementById("tooglebtn");
         var count=0;
+        // Hàm => Function
+        const menu = document.getElementsByClassName('menu')[0];
         tooglebtn.addEventListener("click",()=>{
             if(count==0){
-                document.getElementsByClassName('menu')[0].style.height="300px";
+                menu.style.height='300px';
                 count=1;
             }else{
-                document.getElementsByClassName('menu')[0].style.height="40px";
-                count=0
+                menu.style.height='40px';
+                count=0;
             }
+
         })
     </script>
 </body>

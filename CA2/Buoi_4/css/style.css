@@ -3,9 +3,9 @@
     padding: 0px;
     box-sizing: border-box;
 }
+/* Global */
 ul{
     list-style: none;
-
 }
 .productli:hover .submenuProduct{
     display: block;
@@ -236,7 +236,7 @@ a{text-decoration: none;}
         display: grid;
         grid-template-columns: 93% 4%;
         background-color: black;
-        height: 40px;
+        height:40px;
         overflow: hidden;
     }
     .tooglebtn:hover .menu>.col{
@@ -284,14 +284,15 @@ a{text-decoration: none;}
         cursor: pointer;
         color:white;
         background-color: black;
+        font-size: 22px;
     }
 
     .searchBox{
-        width: 71%;
+        width: 80%;
         margin: 10px auto;
         display: grid;
         grid-template-columns: 70% 30%;
-        /* display: none; */
+        margin-left: 17%;
     }
 
     .searchBox input{
@@ -345,7 +346,7 @@ a{text-decoration: none;}
         height: 260px;
         width: auto;
         margin: 0px auto;
-        margin-left: 15%;
+        margin-left: 12%;
     }
     .productItem .row:nth-child(2){
         display: grid;
@@ -354,6 +355,10 @@ a{text-decoration: none;}
     .productItem .row:nth-child(2) h5{
         font-size: 18px;
         text-align: center;
+    }
+    .productItem .row:last-child{
+        display: grid;
+        grid-template-columns: 50% 50%;
     }
     .productItem .row:last-child button{
         height: 40px;
@@ -568,7 +573,6 @@ a{text-decoration: none;}
         grid-template-columns: 100%;
         background-color: black;
         height: 40px;
-        /* overflow: hidden; */
         position: relative;
     }
     .tooglebtn:hover .menu>.col{
