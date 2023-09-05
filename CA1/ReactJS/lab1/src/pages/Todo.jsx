@@ -4,6 +4,8 @@ import Swal from 'sweetalert2'
 function Todo() {
     const [Todo, setTodo] = useState([]);
     const [item, setItem] = useState('');
+    const [id, setId]= useState(0);
+    const [edit,setEdit]=useState(false);
     const getTodo = () => {
         fetch('https://students.trungthanhweb.com/api/todo?apitoken=' + localStorage.getItem('token'))
             .then((res) => res.json()).then((res) => {
@@ -26,10 +28,81 @@ function Todo() {
     })
     const submitTodo = async (e) => {
         e.preventDefault();
+        if(!item||item===''){
+            Toast.fire({
+                icon: 'error',
+                title: 'Chưa nhập todo'
+            })
+        }else{
+            var data = new URLSearchParams();
+            data.append('apitoken', localStorage.getItem('token'));
+            data.append('todo', item);
+            const response = await fetch('https://students.trungthanhweb.com/api/todo', {
+                method: "POST",
+                headers: {
+                    "Content-Type": 'application/x-www-form-urlencoded'
+                },
+                body: data,
+            });
+            const res = await response.json();
+            if (res.check === true) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Đã thêm thành công'
+                }).then(()=>{
+                    setItem('')
+                    getTodo();
+    
+                })
+            }
+        }
+        
+
+    }
+    const FinishTodo = (i)=>{
+        Swal.fire({
+            icon:'question',
+            text: 'Hoàn thành task?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Đúng',
+            denyButtonText: `Không`,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                var data = new URLSearchParams();
+                data.append('apitoken', localStorage.getItem('token'));
+                data.append('id', i);
+                fetch('https://students.trungthanhweb.com/api/statusTodo', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": 'application/x-www-form-urlencoded'
+                    },
+                    body: data,
+                }).then((res)=>res.json()).then((res)=>{
+                    if (res.check === true) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Đã hoàn thành task'
+                        }).then(()=>{
+                            setItem('')
+                            getTodo();
+            
+                        })
+                    }
+                })
+            } else if (result.isDenied) {
+               window.location.reload();    
+            }
+          })
+    }   
+    const submitEditTodo = async (e)=>{
+        e.preventDefault();
         var data = new URLSearchParams();
         data.append('apitoken', localStorage.getItem('token'));
         data.append('todo', item);
-        const response = await fetch('https://students.trungthanhweb.com/api/todo', {
+        data.append('id', id);
+        const response = await fetch('https://students.trungthanhweb.com/api/updatetodo', {
             method: "POST",
             headers: {
                 "Content-Type": 'application/x-www-form-urlencoded'
@@ -40,15 +113,24 @@ function Todo() {
         if (res.check === true) {
             Toast.fire({
                 icon: 'success',
-                title: 'Đã thêm thành công'
+                title: 'Đã sửa thành công'
             }).then(()=>{
+                setItem('')
                 getTodo();
+                setId(0);
+                setEdit(false);
             })
         }
 
     }
-    const deleteTodo = async(i)=>{
+    const editTodo = (id,old)=>{
+        setId(id);
+        setItem(old);
+        setEdit(true);
+    }
+    const deleteTodo = (i)=>{
         Swal.fire({
+            icon:'question',
             text: 'Xóa task ?',
             showDenyButton: true,
             showCancelButton: false,
@@ -57,14 +139,31 @@ function Todo() {
           }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                var data = URLSearchParams();
+                var data = new URLSearchParams();
+                data.append('apitoken',localStorage.getItem('token'));
+                data.append('id',i);
                 
-                const res = fetch('https://students.trungthanhweb.com/api/deletetodo')
+                fetch('https://students.trungthanhweb.com/api/deletetodo',{
+                    method:"POST",
+                    headers:{
+                        'Content-type':'application/x-www-form-urlencoded'
+                    },
+                    body:data
+                }).then(res =>res.json()).then((res)=>{
+                    if(res.check===true){
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Đã xóa thành công'
+                        }).then(()=>{
+                            getTodo();
+                        })
+                    }
+                })
+
             } else if (result.isDenied) {
-              Swal.fire('Changes are not saved', '', 'info')
+
             }
           })
-        alert(i);
     }
     useEffect(() => {
         getTodo();
@@ -76,10 +175,17 @@ function Todo() {
             <div className="container mt-4">
                 <div className="row">
                     <div className="col-md-9">
-                        <input type="text" className='form-control' onChange={e => setItem(e.target.value)} placeholder='Todo' />
+                        <input type="text" className='form-control' value={item} onChange={e => setItem(e.target.value)} placeholder='Todo' />
                     </div>
                     <div className="col-md">
-                        <button className='btn btn-primary w-100' onClick={submitTodo} >Thêm</button>
+                        {
+                            edit ? 
+                            <button className='btn btn-warning w-100 ' onClick={submitEditTodo} >Sửa</button>
+
+                            :
+                            <button className='btn btn-primary w-100' onClick={submitTodo} >Thêm</button>
+                            
+                        }
                     </div>
                 </div>
                 <div className="row mt-3">
@@ -98,16 +204,21 @@ function Todo() {
                                     {
                                         Todo.map((item, index) =>
                                             <tr key={item.id} className="">
-                                                <td scope="row">{++index}</td>
+                                                <td >{++index}</td>
                                                 <td>{item.note}</td>
                                                 <td>{
-                                                    item.status === 1 ?
-                                                        <input type="checkbox" checked disabled />
+                                                    item.status == 1 ?
+                                                        <input type="checkbox"  checked disabled />
                                                         :
-                                                        <input type="checkbox" />
+                                                        <input type="checkbox" onChange={()=> FinishTodo(item.id)}/>
                                                 }
                                                 </td>
-                                                <td><button className='btn btn-danger' onClick={() => deleteTodo(item.id)}>Xóa</button></td>
+                                                <td>
+                                                    
+                                                    <button className='btn btn-danger' onClick={() => deleteTodo(item.id)}>Xóa</button>
+                                                    <button className=' ms-2 btn btn-warning' onClick={() => editTodo(item.id,item.note)}>Sửa</button>
+                                                    
+                                                </td>
 
                                             </tr>
                                         )
