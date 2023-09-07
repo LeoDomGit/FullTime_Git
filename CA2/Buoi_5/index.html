@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px ;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .container{
+            width: 60%;
+            margin:15% auto
+        }
+        .container>.row{
+            width: 100%;
+            display: grid;
+            grid-template-columns: 80% 20%;
+            margin-bottom: 10px;
+        }
+        .row input{
+            line-height: 30px;  
+            width: 100%;
+            outline: none;
+            border: 1px solid rgb(32, 135, 200);
+            padding: 10px 12px;
+        }
+        .row .btn{
+            width: 80%;
+            height: 70px;
+            cursor: pointer;
+        }
+        .btn:hover{
+            background-color: rgb(32, 135, 200);
+            border: 1px solid white;
+            color:white
+        }
+        li{
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                    <input type="text" class="input" id="name">
+            </div>
+            <div class="col">
+                <button class="btn" id="btn">Thêm</button>
+            </div>
+        </div>
+        <div class="row">
+            <ul id="list">
+            </ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
