@@ -23,21 +23,38 @@ buttons.forEach((el,index) => {
         fetch ()        
     })
 });
-function fetch (){
+function fetch(){
     if(arr.length>0){
         var str=``;
         arr.forEach((el,index) => {
             str+=`
             <tr class="">
-                <td scope="row">`+(++index)+`</td>
+                <td scope="row">`+(index)+`</td>
                 <td>`+el.name+`</td>
-                <td>`+el.price+`</td>
+                <td>`+Intl.NumberFormat('en-US').format(el.price)+`</td>
                 <td>`+el.qty+`</td>
-                <td>`+(el.qty*el.price)+`</td>
-                <td><button class="btn btn-danger btn-sm">Xóa</button></td>
+                <td>`+Intl.NumberFormat('en-US').format((el.qty*el.price))+`</td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteCart(`+index+`)" >Xóa</button></td>
             </tr>
             `
         });
         document.getElementById('resultcart').innerHTML=str;
+    }else{
+        str=`
+        <tr class="">
+        <td colspan=6 scope="row">Chưa có giỏ hàng</td>
+        </tr>
+        `;
+        document.getElementById('resultcart').innerHTML=str;
     }
+}
+
+function deleteCart(x){
+    if(arr.length>1){
+        arr = arr.filter(item => item.id!=x);
+    }else{
+        arr=[];
+    }
+    console.log(arr);
+    fetch() 
 }
