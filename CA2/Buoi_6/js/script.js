@@ -26,10 +26,11 @@ buttons.forEach((el,index) => {
 function fetch(){
     if(arr.length>0){
         var str=``;
+        var i = 1;
         arr.forEach((el,index) => {
             str+=`
             <tr class="">
-                <td scope="row">`+(index)+`</td>
+                <td scope="row">`+(i++)+`</td>
                 <td>`+el.name+`</td>
                 <td>`+Intl.NumberFormat('en-US').format(el.price)+`</td>
                 <td>`+el.qty+`</td>
