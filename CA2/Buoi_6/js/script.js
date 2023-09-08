@@ -1,7 +1,14 @@
 const productnames= document.querySelectorAll('.name');
 const productprices= document.querySelectorAll('.price');
 const buttons= document.querySelectorAll('.addtocartbtn');
-var arr=[];
+if(localStorage.getItem('cart') && localStorage.getItem('cart')!=null){
+    var result = localStorage.getItem('cart');
+    var arr = JSON.parse(result);
+}else{
+    var arr=[];
+}
+fetch();
+
 buttons.forEach((el,index) => {
     el.addEventListener('click',()=>{
         var item= new Object();
@@ -19,7 +26,8 @@ buttons.forEach((el,index) => {
         if(check==false){
             arr.push(item);
         }
-        // console.log(arr);   
+        localStorage.setItem('cart',JSON.stringify(arr));
+        
         fetch ()        
     })
 });
@@ -55,7 +63,11 @@ function deleteCart(x){
         arr = arr.filter(item => item.id!=x);
     }else{
         arr=[];
+    }   
+    if(arr.length==0){
+        localStorage.removeItem('cart')
+    }else{
+        localStorage.setItem('cart',JSON.stringify(arr));
     }
-    console.log(arr);
-    fetch() 
+    window.location.reload();
 }
