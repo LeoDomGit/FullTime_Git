@@ -1,0 +1,17 @@
+*{
+
+    box-sizing: border-box;
+}
+.maincontainer{
+    width: 60%;
+    margin: 10% auto;
+    min-height: 400px;
+    box-shadow: 2px 2px 2px 2px grey;
+    background-color: rgb(40, 191, 232);
+}
+.maincontainer>.col-md>.row{
+    padding-top: 30%;
+}
+.formround{
+    padding-top:22%;
+}
